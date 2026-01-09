@@ -88,17 +88,31 @@
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="read-in-browser">
                                     {% for format in entry.reader_list %}
-                                        <li><a target="_blank"
-                                               href="{{ url_for('web.read_book', book_id=entry.id, book_format=format) }}">{{ format }}</a>
-                                        </li>
+					{% if format == "pdf" %}
+                                            <li><a target="_blank"
+                                                   href="{{ url_for('web.read_book', book_id=entry.id, book_format=format, _anchor='zoom=page-fit') }}">{{ format }}</a>
+                                            </li>
+					{% else %}
+                                            <li><a target="_blank"
+                                                   href="{{ url_for('web.read_book', book_id=entry.id, book_format=format) }}">{{ format }}</a>
+                                            </li>
+					{% endif %}
                                     {% endfor %}
                                 </ul>
                             {% else %}
-                                <a target="_blank"
-                                   href="{{ url_for('web.read_book', book_id=entry.id, book_format=entry.reader_list[0]) }}"
-                                   id="readbtn" class="btn btn-primary" role="button" data-toggle="tooltip" title="{{ _('Read in Browser') }}" data-placement="bottom" data-viewport=".btn-toolbar">
-                                   <span class="glyphicon glyphicon-book"></span> {{ _('Read in Browser') }}
-                                    - {{ entry.reader_list[0] }}</a>
+				{% if entry.reader_list[0] == "pdf" %}
+                                    <a target="_blank"
+                                       href="{{ url_for('web.read_book', book_id=entry.id, book_format=entry.reader_list[0], _anchor='zoom=page-fit') }}"
+                                       id="readbtn" class="btn btn-primary" role="button" data-toggle="tooltip" title="{{ _('Read in Browser') }}" data-placement="bottom" data-viewport=".btn-toolbar">
+                                       <span class="glyphicon glyphicon-book"></span> {{ _('Read in Browser') }}
+                                        - {{ entry.reader_list[0] }}</a>
+				{% else %}
+                                    <a target="_blank"
+                                       href="{{ url_for('web.read_book', book_id=entry.id, book_format=entry.reader_list[0]) }}"
+                                       id="readbtn" class="btn btn-primary" role="button" data-toggle="tooltip" title="{{ _('Read in Browser') }}" data-placement="bottom" data-viewport=".btn-toolbar">
+                                       <span class="glyphicon glyphicon-book"></span> {{ _('Read in Browser') }}
+                                        - {{ entry.reader_list[0] }}</a>
+				{% endif %}
                             {% endif %}
                         </div>
                     {% endif %}
